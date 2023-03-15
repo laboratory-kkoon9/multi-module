@@ -1,0 +1,5 @@
+rootProject.name = 'multimodule-boilerplate'
+include 'api'
+include 'core'
+include 'batch'
+
