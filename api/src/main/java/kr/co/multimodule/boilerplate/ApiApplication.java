@@ -1,4 +1,4 @@
-package kr.co.multimodule.boilerplate.api;
+package kr.co.multimodule.boilerplate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
