@@ -2,7 +2,7 @@ package kr.co.multimodule.boilerplate.core.infra.sms.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.tools.javac.util.List;
+import java.util.List;
 import kr.co.multimodule.boilerplate.core.infra.sms.SmsStrategy;
 import kr.co.multimodule.boilerplate.core.infra.sms.dto.MessageDto;
 import kr.co.multimodule.boilerplate.core.infra.sms.dto.SmsNcpDto;
@@ -16,8 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import static kr.co.multimodule.boilerplate.core.infra.sms.util.StringParser.makeCertificationNumber;
 
 @Slf4j
 @Component
@@ -68,10 +66,10 @@ public class SmsNcpStrategy implements SmsStrategy {
     }
 
     @Override
-    public void sendCertificationNumber(SmsType smsType, String destPhoneNumber) {
+    public void sendCertificationNumber(final String destPhoneNumber, final String certificationNumber) {
         SmsNcpDto dto = SmsNcpDto.builder()
                 .from(sendPhoneNumber)
-                .content(String.format("인증번호 [%s] 입니다.", makeCertificationNumber()))
+                .content(String.format("인증번호 [%s] 입니다.", certificationNumber))
                 .messages(List.of(
                         new MessageDto(destPhoneNumber)
                 ))
@@ -88,9 +86,5 @@ public class SmsNcpStrategy implements SmsStrategy {
                 .bodyToMono(SmsNcpResponseDto.class).block();
 
         log.info(result.toString());
-    }
-
-    private String getUrl() {
-        return String.format(SMS_BASE_URL, serviceId) + String.format(DETAIL_URL, serviceId);
     }
 }

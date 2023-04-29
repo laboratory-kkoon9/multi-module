@@ -2,6 +2,8 @@ package kr.co.multimodule.boilerplate.core.user.application.service;
 
 import kr.co.multimodule.boilerplate.core.global.core.exception.BadRequestException;
 import kr.co.multimodule.boilerplate.core.global.core.exception.DuplicatePhoneNumberException;
+import kr.co.multimodule.boilerplate.core.infra.sms.SmsService;
+import kr.co.multimodule.boilerplate.core.infra.sms.enumtype.SmsType;
 import kr.co.multimodule.boilerplate.core.user.application.port.inport.SignUpCommand;
 import kr.co.multimodule.boilerplate.core.user.application.port.inport.SignUpUseCase;
 import kr.co.multimodule.boilerplate.core.user.application.port.outport.CreateUserPort;
@@ -19,6 +21,7 @@ public class SignUpService implements SignUpUseCase {
     private static final String DUPLICATE_PHONE_NUMBER_MESSAGE = "이미 존재하는 핸드폰 번호입니다.";
     private final LoadUserPort loadUserPort;
     private final CreateUserPort createUserPort;
+    private final SmsService smsService;
 
     @Override
     public void signUp(final SignUpCommand command) {
@@ -35,5 +38,11 @@ public class SignUpService implements SignUpUseCase {
                 .nickname(command.getNickname())
                 .build();
         this.createUserPort.createUser(user);
+    }
+
+    @Override
+    public String validatePhoneNumber(String phoneNumber) {
+        smsService.sendCertificationNumber(SmsType.NCP, phoneNumber);
+        return phoneNumber;
     }
 }

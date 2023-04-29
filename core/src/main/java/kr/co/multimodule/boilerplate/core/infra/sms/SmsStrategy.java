@@ -4,5 +4,5 @@ import kr.co.multimodule.boilerplate.core.infra.sms.enumtype.SmsType;
 
 public interface SmsStrategy {
     SmsType getStrategyName();
-    void sendCertificationNumber(SmsType smsType, String destPhoneNumber);
+    void sendCertificationNumber(String destPhoneNumber, String certificationNumber);
 }

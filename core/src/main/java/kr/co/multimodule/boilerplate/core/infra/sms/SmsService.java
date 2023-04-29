@@ -5,18 +5,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import static kr.co.multimodule.boilerplate.core.infra.sms.util.StringParser.makeCertificationNumber;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class SmsService {
     private final SmsStrategyFactory strategyFactory;
 
-    private void sendCertificationNumber(SmsType smsType, String destPhoneNumber) {
-        SmsStrategy smsStrategy = this.decideSmsClientStrategy(smsType);
-        smsStrategy.sendCertificationNumber(smsType, destPhoneNumber);
+    public String sendCertificationNumber(final SmsType smsType, final String destPhoneNumber) {
+        final SmsStrategy smsStrategy = this.decideSmsClientStrategy(smsType);
+        String certificationNumber = makeCertificationNumber();
+        smsStrategy.sendCertificationNumber(destPhoneNumber, certificationNumber);
+        return certificationNumber;
     }
 
-    private SmsStrategy decideSmsClientStrategy(SmsType smsType) {
+    private SmsStrategy decideSmsClientStrategy(final SmsType smsType) {
         return this.strategyFactory.findStrategy(smsType);
     }
 }
